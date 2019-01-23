@@ -9,9 +9,6 @@ def isValidISBN(isbn):
     # check for length
     if len(isbn) != 10:
         return False
-
-    formatted_num = isbn.replace("-", "")
-
     """
     Computing weighted sum
     of first 9 digits
@@ -34,7 +31,6 @@ def isValidISBN(isbn):
     return (checksum % 11 == 0)
 
 
-csvfile = "./isbns.txt"
 
 
 def multiprocess(limits=[]):
@@ -67,6 +63,7 @@ if __name__ == '__main__':
     p = Pool(9)
     isbn_list += p.map(multiprocess, [*args])
 
+    csvfile = "./isbns.txt"
     with open(csvfile, 'w') as resultFile:
         for i in isbn_list:
             for j in i:
