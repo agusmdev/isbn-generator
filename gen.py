@@ -9,6 +9,9 @@ def isValidISBN(isbn):
     # check for length
     if len(isbn) != 10:
         return False
+
+    formatted_num = isbn.replace("-", "")
+
     """
     Computing weighted sum
     of first 9 digits
@@ -31,11 +34,20 @@ def isValidISBN(isbn):
     return (checksum % 11 == 0)
 
 
+def split_range(range_, n):
+    div = range_//n
+    res = [[0, div]]
+    last_div = div
+    for i in range(2, n):
+        res.append([last_div, div*i])
+        last_div = div*i
+    return res
 
 
 def multiprocess(limits=[]):
     start = limits[0]
     stop = limits[1]
+    isbn_list = []
     for i in range(start, stop):
         isbn = str(i)
         isbn_ = "0"*(10 - len(isbn)) + isbn
@@ -49,17 +61,8 @@ def multiprocess(limits=[]):
 
 if __name__ == '__main__':
     isbn_list = []
-    args = [
-            [0, 10000000],
-            [10000000, 20000000],
-            [20000000, 30000000],
-            [30000000, 40000000],
-            [40000000, 50000000],
-            [60000000, 70000000],
-            [70000000, 80000000],
-            [80000000, 90000000],
-            [90000000, 99999999],
-            ]
+
+    args = split_range(1000000, 9)
     p = Pool(9)
     isbn_list += p.map(multiprocess, [*args])
 
