@@ -1,7 +1,6 @@
 import csv
 from random import randint
-from multiprocessing import Process, Pool
-
+from multiprocessing import Pool
 
 
 def isValidISBN(isbn):
@@ -60,14 +59,16 @@ def multiprocess(limits=[]):
 
 
 if __name__ == '__main__':
+    isbns = []
     isbn_list = []
 
     args = split_range(1000000, 9)
     p = Pool(9)
-    isbn_list += p.map(multiprocess, [*args])
+    isbns += p.map(multiprocess, [*args])
+    for i in isbns:
+        isbn_list.extend(i)
 
     csvfile = "./isbns.txt"
     with open(csvfile, 'w') as resultFile:
         for i in isbn_list:
-            for j in i:
-                resultFile.write(j + ",")
+            resultFile.write(i + ",")
